@@ -44,10 +44,10 @@ dependencies {
     implementation "io.insert-koin:koin-android:3.3.3"
 }
 
-afterEvaluate{
+afterEvaluate {
     publishing {
-        publications{
-            release(MavenPublication){
+        publications {
+            release(MavenPublication) {
                 from components.release
 
                 groupId = 'com.krykun.reduxmvi'
@@ -56,5 +56,4 @@ afterEvaluate{
             }
         }
     }
-
 }
