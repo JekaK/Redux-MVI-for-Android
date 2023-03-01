@@ -18,8 +18,10 @@ To install the library in your Android project, follow these steps:
 
    ```gradle
    dependencies {
-        implementation 'com.github.JekaK:Redux-MVI-for-Android:1.0.0'
+        implementation 'com.github.JekaK:Redux-MVI-for-Android:version'
    }
+
+Note that you should replace `version` with the [latest release](https://github.com/JekaK/Redux-MVI-for-Android/releases) version available on JitPack.
 
 ## License
 
