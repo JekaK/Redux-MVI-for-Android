@@ -11,7 +11,6 @@ To install the library in your Android project, follow these steps:
    ```gradle
    allprojects {
        repositories {
-           ...
            maven { url 'https://jitpack.io' }
        }
    }
