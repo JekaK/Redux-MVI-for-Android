@@ -1,13 +1,13 @@
-package com.krykun.reduxmvi.log.jlogger;
+package com.krykun.reduxmvi.log.jlogger
 
-public class JLoggerFactory {
-
-    private JLoggerFactory() {
-        throw new IllegalStateException("JLoggerFactory class");
+class JLoggerFactory private constructor() {
+    init {
+        throw IllegalStateException("JLoggerFactory class")
     }
 
-    public static JLogger getLogger(Class<?> clazz) {
-        return new JLogger(clazz.getSimpleName());
+    companion object {
+        fun getLogger(clazz: Class<*>): JLogger {
+            return JLogger(clazz.simpleName)
+        }
     }
 }
-
