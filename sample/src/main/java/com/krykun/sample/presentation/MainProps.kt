@@ -1,4 +1,6 @@
 package com.krykun.sample.presentation
 
-class MainProps {
-}
+data class MainProps(
+    val counter: Int = 0,
+    val addCounterAction: () -> Unit = {}
+)

@@ -2,6 +2,7 @@ package com.krykun.sample
 
 import android.app.Application
 import com.krykun.reduxmvi.di.dataModules
+import com.krykun.reduxmvi.di.hardwareModules
 import com.krykun.reduxmvi.di.presentationModules
 import com.krykun.sample.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -17,7 +18,7 @@ class App : Application() {
     private fun setupDIGraph() {
         startKoin {
             androidContext(this@App)
-            modules(*dataModules, *presentationModules, *viewModelModule)
+            modules(*hardwareModules, *dataModules, *presentationModules, *viewModelModule)
         }
     }
 }
