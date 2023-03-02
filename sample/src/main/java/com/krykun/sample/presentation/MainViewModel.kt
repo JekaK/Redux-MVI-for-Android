@@ -2,8 +2,7 @@ package com.krykun.sample.presentation
 
 import androidx.lifecycle.ViewModel
 import com.krykun.reduxmvi.action.AddStateAction
-import com.krykun.reduxmvi.ext.findState
-import com.krykun.reduxmvi.ext.takeWhenChanged
+import com.krykun.reduxmvi.ext.getStateUpdates
 import com.krykun.reduxmvi.global.Action
 import com.krykun.reduxmvi.global.AppState
 import com.krykun.reduxmvi.global.Store
@@ -22,9 +21,7 @@ class MainViewModel(
     }
 
     fun mainProps() = store.stateFlow()
-        .takeWhenChanged {
-            it.findState<MainState>()
-        }
+        .getStateUpdates<MainState>()
         .map {
             MainProps(it.counter) {
                 store.dispatch(AddCounterAction())
