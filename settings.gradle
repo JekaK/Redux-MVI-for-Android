@@ -9,3 +9,4 @@ pluginManagement {
 rootProject.name = "ReduxMVI"
 include ':app'
 include ':ReduxMVI'
+include ':sample'

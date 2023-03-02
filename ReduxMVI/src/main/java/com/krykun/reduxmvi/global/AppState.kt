@@ -8,4 +8,5 @@ import com.krykun.reduxmvi.navigation.NavigationRequest
  */
 data class AppState(
     val navigationRequests: List<NavigationRequest> = emptyList(),
+    val stateSet: HashSet<Any> = hashSetOf()
 )
