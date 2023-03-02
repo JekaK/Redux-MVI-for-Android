@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.krykun.sample.presentation.MainProps
 import com.krykun.sample.presentation.MainViewModel
-import com.krykun.sample.ui.theme.ReduxMVITheme
+import com.krykun.sample.theme.ReduxMVITheme
 import com.krykun.sample.ui.view.AddButton
 import com.krykun.sample.ui.view.CounterView
 import org.koin.androidx.viewmodel.ext.android.viewModel
