@@ -13,6 +13,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,4 +45,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation "io.insert-koin:koin-android:3.3.3"
     implementation project(path: ':sample')
+    implementation "androidx.multidex:multidex:2.0.1"
+
 }
