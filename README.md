@@ -1,6 +1,6 @@
 # Redux-MVI-for-Android
 
-[![Release](https://jitpack.io/v/JekaK/Redux-MVI-for-Android.svg)](https://jitpack.io/#JekaK/Redux-MVI-for-Android)
+[![Release](https://jitpack.io/v/JekaK/Redux-MVI-for-Android.svg)](https://jitpack.io/#JekaK/Redux-MVI-for-Android) [![codebeat badge](https://codebeat.co/badges/aac325a3-65b2-45c5-822f-db067b098434)](https://codebeat.co/projects/github-com-jekak-redux-mvi-for-android-main)
 
 This repository provides a Redux-MVI architecture implementation for Android applications. It is designed to help developers build scalable, maintainable, and testable Android applications.
 
