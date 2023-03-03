@@ -1,5 +1,7 @@
 # Redux-MVI-for-Android
 
+[![Release](https://jitpack.io/v/JekaK/Redux-MVI-for-Android.svg)](https://jitpack.io/#JekaK/Redux-MVI-for-Android)
+
 This repository provides a Redux-MVI architecture implementation for Android applications. It is designed to help developers build scalable, maintainable, and testable Android applications.
 
 ## Installation
