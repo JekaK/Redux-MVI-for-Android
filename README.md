@@ -29,6 +29,7 @@ Note that you should replace `version` with the [latest release](https://github.
 1. Start a Koin DI(it's povered by Koin, so you don't have a lot of choise what DI use). viewModelModule is module provided by sample. You will create it by yourself. or not is you not use ViewModels at your project. Other modules provided by library:
 
 ```
+kotlin
  class App : Application() { 
   
      override fun onCreate() { 
