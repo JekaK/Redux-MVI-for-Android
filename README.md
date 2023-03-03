@@ -27,10 +27,7 @@ Note that you should replace `version` with the [latest release](https://github.
 
 ## Example
 
-```
-kotlin:/src/main/java/com/krykun/sample/action/AddCounterAction.kt [8-14]
- 
-``` 
+https://github.com/JekaK/Redux-MVI-for-Android/blob/b60d470e5ce9dfb3f6ed48a124dcd16fedc9fc79/sample/src/main/java/com/krykun/sample/action/AddCounterAction.kt#L8-L14
 
 ## License
 
