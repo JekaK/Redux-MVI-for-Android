@@ -50,32 +50,83 @@ Note that you should replace `version` with the [latest release](https://github.
 State class is for saving state of app. Props is mapped class as in Clean Arch and it created for state that will be used only in views and not the whole one project state. ViewModel is for communicating between view and state updates.
 
 State is DataClass:
-https://github.com/JekaK/Redux-MVI-for-Android/blob/9be3b88fed3b98752fe8cbfda7f53b84db5aaf9a/sample/src/main/java/com/krykun/sample/presentation/MainState.kt#L3-L6
+
+```kotlin
+data class MainState( 
+     val isOpen: Boolean = false, 
+     val counter: Int = 0 
+ ) 
+ ```
 
 Props also a DataClass. And in my case it contains a mapper to(cause it's tiny and not deserve a separate class :D):
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/9be3b88fed3b98752fe8cbfda7f53b84db5aaf9a/sample/src/main/java/com/krykun/sample/presentation/MainProps.kt#L3-L12
-
+```kotlin
+ data class MainProps( 
+     val counter: Int = 0, 
+     val addCounterAction: () -> Unit = {} 
+ ) 
+  
+ fun MainState.toProps(addCounterAction: () -> Unit): MainProps { 
+     return MainProps(this.counter) { 
+         addCounterAction() 
+     } 
+ } 
+ ```
 ViewModel contains a store from Redux architecture for dispatching actions and have a link to state for view usage:
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/79ad58f62dc4dff219b7ec520157bff97cac9a01/sample/src/main/java/com/krykun/sample/presentation/MainViewModel.kt#L12-L15
-
+```kotlin
+ class MainViewModel( 
+     private val store: Store<Action, AppState>, 
+     private val bindingDispatcher: CoroutineDispatcher 
+ ) : ViewModel() { 
+ ```
 In ```init block``` I adding a state for this screen to state list by pass it to dispatched action. This give us ability to save state and retrieve it from Flow.
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/79ad58f62dc4dff219b7ec520157bff97cac9a01/sample/src/main/java/com/krykun/sample/presentation/MainViewModel.kt#L17-L19
+```kotlin
+ init { 
+     store.dispatch(AddStateAction(MainState())) 
+ } 
+ ```
 
 Also ```mainProps``` give us a Flow of props that contains state mapped to props and can be used in our Activity or Fragment or Composable function navigated by Composable navigation.
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/79ad58f62dc4dff219b7ec520157bff97cac9a01/sample/src/main/java/com/krykun/sample/presentation/MainViewModel.kt#L21-L26
+```kotlin
+ fun mainProps() = store.stateFlow() 
+     .getStateUpdatesMapped<MainState, MainProps>(bindingDispatcher) { 
+         it.toProps { 
+             store.dispatch(AddCounterAction()) 
+         } 
+     } 
+```
 
 3. Create an action for some busines logic. In our case we have a button with counter. When we click on button action is dispatching and redusing a new state. This will trigger a state update via flow and show result to user:
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/9be3b88fed3b98752fe8cbfda7f53b84db5aaf9a/sample/src/main/java/com/krykun/sample/action/AddCounterAction.kt#L8-L14
-
+```kotlin
+class AddCounterAction : ReducibleAction { 
+     override fun reduce(state: AppState): AppState { 
+         return state.applyForState<MainState> { 
+             it.copy(counter = it.counter + 1) 
+         } 
+     } 
+ } 
+ ```
 4. Then use it in Acivity as ```collectAsState``` function:
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/9be3b88fed3b98752fe8cbfda7f53b84db5aaf9a/sample/src/main/java/com/krykun/sample/MainActivity.kt#L33-L44
-
+```kotlin
+ val props = viewModel.mainProps().collectAsState(initial = MainProps()) 
+ Column( 
+     modifier = Modifier.fillMaxSize(), 
+     horizontalAlignment = Alignment.CenterHorizontally, 
+     verticalArrangement = Arrangement.Center 
+ ) { 
+     CounterView(props.value.counter) 
+     Spacer(modifier = Modifier.height(20.dp)) 
+     AddButton { 
+         props.value.addCounterAction() 
+     } 
+ } 
+ ```
+ 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
