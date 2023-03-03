@@ -43,7 +43,7 @@ https://github.com/JekaK/Redux-MVI-for-Android/blob/9be3b88fed3b98752fe8cbfda7f5
 
 ViewModel contains a store from Redux architecture for dispatching actions and have a link to state for view usage:
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/9be3b88fed3b98752fe8cbfda7f53b84db5aaf9a/sample/src/main/java/com/krykun/sample/presentation/MainProps.kt#L3-L27
+https://github.com/JekaK/Redux-MVI-for-Android/blob/79ad58f62dc4dff219b7ec520157bff97cac9a01/sample/src/main/java/com/krykun/sample/presentation/MainViewModel.kt#L12-L27
 
 In ```init block``` I adding a state for this screen to state list by pass it to dispatched action. This give us ability to save state and retrieve it from Flow.
 
