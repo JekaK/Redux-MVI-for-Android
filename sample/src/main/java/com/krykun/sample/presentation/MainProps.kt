@@ -4,3 +4,9 @@ data class MainProps(
     val counter: Int = 0,
     val addCounterAction: () -> Unit = {}
 )
+
+fun MainState.toProps(addCounterAction: () -> Unit): MainProps {
+    return MainProps(this.counter) {
+        addCounterAction()
+    }
+}
