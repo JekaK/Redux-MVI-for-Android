@@ -25,6 +25,13 @@ To install the library in your Android project, follow these steps:
 
 Note that you should replace `version` with the [latest release](https://github.com/JekaK/Redux-MVI-for-Android/releases) version available on JitPack.
 
+## Example
+
+```
+kotlin:/src/main/java/com/krykun/sample/action/AddCounterAction.kt [8-14]
+ 
+``` 
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
