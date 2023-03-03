@@ -43,11 +43,15 @@ https://github.com/JekaK/Redux-MVI-for-Android/blob/9be3b88fed3b98752fe8cbfda7f5
 
 ViewModel contains a store from Redux architecture for dispatching actions and have a link to state for view usage:
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/79ad58f62dc4dff219b7ec520157bff97cac9a01/sample/src/main/java/com/krykun/sample/presentation/MainViewModel.kt#L12-L27
+https://github.com/JekaK/Redux-MVI-for-Android/blob/79ad58f62dc4dff219b7ec520157bff97cac9a01/sample/src/main/java/com/krykun/sample/presentation/MainViewModel.kt#L12-L15
 
 In ```init block``` I adding a state for this screen to state list by pass it to dispatched action. This give us ability to save state and retrieve it from Flow.
 
+https://github.com/JekaK/Redux-MVI-for-Android/blob/79ad58f62dc4dff219b7ec520157bff97cac9a01/sample/src/main/java/com/krykun/sample/presentation/MainViewModel.kt#L17-L19
+
 Also ```mainProps``` give us a Flow of props that contains state mapped to props and can be used in our Activity or Fragment or Composable function navigated by Composable navigation.
+
+https://github.com/JekaK/Redux-MVI-for-Android/blob/79ad58f62dc4dff219b7ec520157bff97cac9a01/sample/src/main/java/com/krykun/sample/presentation/MainViewModel.kt#L21-L26
 
 3. Create an action for some busines logic. In our case we have a button with counter. When we click on button action is dispatching and redusing a new state. This will trigger a state update via flow and show result to user:
 
