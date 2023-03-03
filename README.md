@@ -26,9 +26,24 @@ To install the library in your Android project, follow these steps:
 Note that you should replace `version` with the [latest release](https://github.com/JekaK/Redux-MVI-for-Android/releases) version available on JitPack.
 
 ## Example
-1. Start a Koin DI(it's povered by Koin, so you don't have a lot of choise what DI use). viewModelModule is module provided by sample. You will create it by yourself. or not is you not use ViewModels at your project. Other modules provided by library
+1. Start a Koin DI(it's povered by Koin, so you don't have a lot of choise what DI use). viewModelModule is module provided by sample. You will create it by yourself. or not is you not use ViewModels at your project. Other modules provided by library:
 
-https://github.com/JekaK/Redux-MVI-for-Android/blob/9be3b88fed3b98752fe8cbfda7f53b84db5aaf9a/sample/src/main/java/com/krykun/sample/App.kt#L11-L24
+```
+ class App : Application() { 
+  
+     override fun onCreate() { 
+         super.onCreate() 
+         setupDIGraph() 
+     } 
+  
+     private fun setupDIGraph() { 
+         startKoin { 
+             androidContext(this@App) 
+             modules(*hardwareModules, *dataModules, *presentationModules, *viewModelModule) 
+         } 
+     } 
+ } 
+ ```
 
 2. Then I recomend you to create a package called "Presentation" and put 3 files there: State, Props and ViewModel.
 
