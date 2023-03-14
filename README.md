@@ -26,7 +26,7 @@ To install the library in your Android project, follow these steps:
 Note that you should replace `version` with the [latest release](https://github.com/JekaK/Redux-MVI-for-Android/releases) version available on JitPack.
 
 ## Example
-1. Start a Koin DI(it's powered by Koin, so you don't have a lot of choise what DI use). viewModelModule is module provided by sample. You will create it by yourself. or not is you not use ViewModels at your project. Other modules provided by library:
+1. Start a Koin DI(it's powered by Koin, so you don't have a lot of choise what DI use). viewModelModule is module provided by sample. You will create it by yourself. Or not if you not using ViewModels at your project. Other modules provided by library and SHOULD BE CONNECTED AS BELOW:
 
 ```kotlin
  class App : Application() { 
