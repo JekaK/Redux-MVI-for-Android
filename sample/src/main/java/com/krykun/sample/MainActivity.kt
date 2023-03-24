@@ -7,10 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,6 +16,7 @@ import com.krykun.sample.presentation.MainViewModel
 import com.krykun.sample.theme.ReduxMVITheme
 import com.krykun.sample.ui.view.AddButton
 import com.krykun.sample.ui.view.CounterView
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -35,20 +33,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val props = viewModel.mainProps().collectAsState(initial = MainProps())
-                    val propertyPropsFlow = viewModel.propertyProps()
-
-                    val counter by propertyPropsFlow.collectAsState(0)
-
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        CounterView(counter)
+                        CounterView(viewModel.counter.value)
                         Spacer(modifier = Modifier.height(20.dp))
                         AddButton {
-                            props.value.addCounterAction()
+                            viewModel.props.value.addCounterAction()
                         }
                     }
                 }
