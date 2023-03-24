@@ -29,7 +29,6 @@ class MainViewModel(
 
     fun propertyProps() = store.stateFlow()
         .getStateUpdatesProperty<MainState, Int>(bindingDispatcher) {
-            Log.d("SAMPLE_TAG", "Counter:" + it.counter.toString())
             it.counter
         }
 }

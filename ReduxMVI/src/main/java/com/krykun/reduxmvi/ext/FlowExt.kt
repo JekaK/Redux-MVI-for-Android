@@ -1,5 +1,6 @@
 package com.krykun.reduxmvi.ext
 
+import android.util.Log
 import com.krykun.reduxmvi.global.AppState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,6 +25,7 @@ inline fun <reified T, reified R> Flow<AppState>.getStateUpdatesProperty(
     bindingDispatcher: CoroutineDispatcher,
     crossinline transform: suspend (value: T) -> R,
 ): Flow<R> {
+
     return this
         .flatMapLatest {
             it.findStateFlow<T>().takeWhenChanged(transform)
