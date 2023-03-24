@@ -1,6 +1,6 @@
 package com.krykun.reduxmvi.log
 
-import com.krykun.reduxmvi.BuildConfig
+import com.krykun.reduxmvilib.BuildConfig
 
 object LogConfig {
     const val FILE_OUTPUT_BUFFER_SIZE = 5

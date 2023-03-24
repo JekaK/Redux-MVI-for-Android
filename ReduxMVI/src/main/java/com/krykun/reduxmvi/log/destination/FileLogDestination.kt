@@ -3,11 +3,11 @@ package com.krykun.reduxmvi.log.destination
 import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.krykun.reduxmvi.BuildConfig
 import com.krykun.reduxmvi.log.Channel
 import com.krykun.reduxmvi.log.Log
 import com.krykun.reduxmvi.log.LogLevel
 import com.krykun.reduxmvi.utils.DateUtils
+import com.krykun.reduxmvilib.BuildConfig
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
@@ -17,7 +17,7 @@ class FileLogDestination(
     private val context: Context,
     private val minLogLevel: LogLevel,
     private val logBufferSize: Int,
-    private val maxLogsFileAmount: Int
+    private val maxLogsFileAmount: Int,
 ) : LogDestination {
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -105,7 +105,7 @@ class FileLogDestination(
         val timestamp: Long,
         val logLevel: LogLevel,
         val tag: String,
-        val message: String
+        val message: String,
     ) {
         private val timestampFormat = "yyyy-MM-dd HH:mm:ss.SSS"
 

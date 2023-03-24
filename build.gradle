@@ -24,14 +24,6 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.8.10' apply false
 }
 
-allprojects {
-    repositories {
-        google()
-        maven { url "https://jitpack.io" }
-        mavenCentral()
-    }
-}
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
