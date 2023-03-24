@@ -2,10 +2,8 @@ package com.krykun.reduxmvi.ext
 
 import com.krykun.reduxmvi.global.AppState
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 
 /**
  * Returns a flow containing the results of applying the given [transform] function to each value of the original flow.
@@ -18,6 +16,18 @@ inline fun <T, R> Flow<T>.takeWhenChanged(crossinline transform: suspend (value:
 inline fun <reified T> Flow<AppState>.getStateUpdates(bindingDispatcher: CoroutineDispatcher): Flow<T> {
     return this
         .takeWhenChanged<AppState, T> { it.findState() }
+        .flowOn(bindingDispatcher)
+}
+
+@OptIn(ExperimentalCoroutinesApi::class)
+inline fun <reified T, reified R> Flow<AppState>.getStateUpdatesProperty(
+    bindingDispatcher: CoroutineDispatcher,
+    crossinline transform: suspend (value: T) -> R,
+): Flow<R> {
+    return this
+        .flatMapLatest {
+            it.findStateFlow<T>().takeWhenChanged(transform)
+        }
         .flowOn(bindingDispatcher)
 }
 
