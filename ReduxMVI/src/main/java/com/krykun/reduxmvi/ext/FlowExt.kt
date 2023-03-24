@@ -15,15 +15,15 @@ inline fun <T, R> Flow<T>.takeWhenChanged(crossinline transform: suspend (value:
     map(transform).distinctUntilChanged()
 
 
-inline fun <reified T> Flow<AppState>.getStateUpdates(
-): Flow<T> {
+inline fun <reified T> Flow<AppState>.getStateUpdates(bindingDispatcher: CoroutineDispatcher): Flow<T> {
     return this
-        .takeWhenChanged { it.findState() }
+        .takeWhenChanged<AppState, T> { it.findState() }
+        .flowOn(bindingDispatcher)
 }
 
 inline fun <reified T, reified S> Flow<AppState>.getStateUpdatesMapped(
     bindingDispatcher: CoroutineDispatcher,
-    crossinline map: (T) -> S
+    crossinline map: (T) -> S,
 ): Flow<S> {
     return this
         .takeWhenChanged<AppState, T> { it.findState() }
