@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.krykun.reduxmvi.action.AddStateAction
 import com.krykun.reduxmvi.ext.getStateUpdatesMapped
 import com.krykun.reduxmvi.ext.getStateUpdatesProperty
+import com.krykun.reduxmvi.ext.toDedicatedType
 import com.krykun.reduxmvi.global.Action
 import com.krykun.reduxmvi.global.AppState
 import com.krykun.reduxmvi.global.Store
@@ -59,7 +60,8 @@ class MainViewModel(
      * whenever it changes
      */
     private fun propertyProps() = store.stateFlow()
-        .getStateUpdatesProperty<MainState, Int>(bindingDispatcher) {
+        .getStateUpdatesProperty<MainState>(bindingDispatcher) {
             it.counter
         }
+        .toDedicatedType<Int>()
 }

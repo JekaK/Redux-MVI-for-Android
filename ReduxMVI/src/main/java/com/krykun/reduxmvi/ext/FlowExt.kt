@@ -1,7 +1,7 @@
 package com.krykun.reduxmvi.ext
 
-import android.util.Log
 import com.krykun.reduxmvi.global.AppState
+import com.krykun.reduxmvilib.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -20,11 +20,17 @@ inline fun <reified T> Flow<AppState>.getStateUpdates(bindingDispatcher: Corouti
         .flowOn(bindingDispatcher)
 }
 
+fun <R> Flow<Any>.toDedicatedType(): Flow<R> {
+    return this.map {
+        it as R
+    }
+}
+
 @OptIn(ExperimentalCoroutinesApi::class)
-inline fun <reified T, reified R> Flow<AppState>.getStateUpdatesProperty(
+inline fun <reified T> Flow<AppState>.getStateUpdatesProperty(
     bindingDispatcher: CoroutineDispatcher,
-    crossinline transform: suspend (value: T) -> R,
-): Flow<R> {
+    crossinline transform: suspend (value: T) -> Any,
+): Flow<Any> {
 
     return this
         .flatMapLatest {
