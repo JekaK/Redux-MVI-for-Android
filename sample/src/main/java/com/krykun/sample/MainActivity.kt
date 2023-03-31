@@ -5,8 +5,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,25 +25,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ReduxMVITheme {
-                // A surface container using the 'background' color from the theme
                 val context = LocalContext.current
-                Surface(
+                Column(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        CounterView(viewModel.counter.value)
-                        Spacer(modifier = Modifier.height(20.dp))
-                        AddButton {
-                            viewModel.props.value.addCounterAction()
-                        }
+                    CounterView(viewModel.counter.value)
+                    Spacer(modifier = Modifier.height(20.dp))
+                    AddButton {
+                        viewModel.props.value.addCounterAction()
                     }
                 }
-
                 LaunchedEffect(key1 = viewModel.navigationEventsState.value) {
                     when (val event = viewModel.navigationEventsState.value) {
                         is MainNavigation.ShowCounterToast -> {
