@@ -127,6 +127,57 @@ class AddCounterAction : ReducibleAction {
  } 
  ```
  
+## Middleware
+
+The Redux-MVI-for-Android package provides middleware as a way to intercept and modify actions and state changes in the Redux store. One example of middleware provided in this package is the "MainMiddleware", which send a message action via navigation requests when it intercepted by it.
+
+```kotlin
+
+class MainMiddleware : Middleware<Action, Store<Action, AppState>> {
+
+    /**
+     * > When the `AddCounterAction` is dispatched, dispatch a `CounterToastAction`
+     *
+     * The `dispatchCounterToastAction` function is defined as follows:
+     */
+    override fun dispatch(
+        action: Action,
+        store: Store<Action, AppState>,
+        next: Dispatcher<Action, Store<Action, AppState>>,
+    ): Action {
+        // You can make a dispatch right in return, but if you want not updated state and somehow modify it before
+        // action is will be dispatched to next middleware - make it as in example below
+        val next = next.dispatch(action, store)
+
+        when (action) {
+            is AddCounterAction -> dispatchCounterToastAction(store)
+        }
+
+        return next
+    }
+
+
+    /**
+     * "Dispatch a toast action that shows the current counter value."
+     *
+     * The function is private because it's only used internally by the MainActivity
+     */
+    private fun dispatchCounterToastAction(store: Store<Action, AppState>) {
+        val counter = store.getState().findState<MainState>().counter
+
+        store.dispatch(ShowCounterToastAction(counter))
+    }
+
+}
+```
+For middleware setup you should provide your own ```MiddlewareModule``` as in Sample package and connect it to Koin in App class.
+
+**!!!IPORTANT!!!**
+
+For better performance you can create a custom feature for setup only this middlewares that you will use in particular screen.
+
+Example: you have a project with 100+ middlewares that potentially can handle all actions. They all will be added to a chain of middlewares. But in different screens you need only few middlewares in one, so you can add a Feature module and setup a middleware as Feature fo some screen by emiiting ```(SetupFeature(Feature)``` in ```init``` block of ViewModel and ```CleanupFeature(Feature)``` in ```onCleared()``` function of ViewModel. For additional info check ```MainViewModel``` at Presentation package, ```FeatureModle``` and ```MiddlewareModule``` at DI package. All in sample package as well.
+ 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
