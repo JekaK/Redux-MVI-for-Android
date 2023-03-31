@@ -23,7 +23,7 @@ private val middlewareModule = module {
 }
 
 private val featuresModule = module {
-    factory(named(Feature.GLOBAL.name)) {
+    factory(named(Feature.GLOBAL::class.java.simpleName)) {
         listOf(
             get<LoggingMiddleware>(),
         )

@@ -1,23 +1,22 @@
 package com.krykun.sample
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.krykun.sample.presentation.MainProps
+import com.krykun.sample.navigation.MainNavigation
 import com.krykun.sample.presentation.MainViewModel
 import com.krykun.sample.theme.ReduxMVITheme
 import com.krykun.sample.ui.view.AddButton
 import com.krykun.sample.ui.view.CounterView
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ReduxMVITheme {
                 // A surface container using the 'background' color from the theme
+                val context = LocalContext.current
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -43,6 +43,19 @@ class MainActivity : ComponentActivity() {
                         AddButton {
                             viewModel.props.value.addCounterAction()
                         }
+                    }
+                }
+
+                LaunchedEffect(key1 = viewModel.navigationEventsState.value) {
+                    when (val event = viewModel.navigationEventsState.value) {
+                        is MainNavigation.ShowCounterToast -> {
+                            Toast.makeText(
+                                context,
+                                "Counter is ${event.counter}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        else -> {}
                     }
                 }
             }

@@ -14,6 +14,6 @@ class KoinMiddlewareFactory(private val app: Application) :
     MiddlewareFactory<Action, Store<Action, AppState>> {
 
     override fun createForFeature(feature: Feature): List<Middleware<Action, Store<Action, AppState>>> {
-        return app.get(named(feature.name))
+        return app.get(named(feature::class.java.simpleName))
     }
 }
