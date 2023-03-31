@@ -39,7 +39,7 @@ Note that you should replace `version` with the [latest release](https://github.
      private fun setupDIGraph() { 
          startKoin { 
              androidContext(this@App) 
-             modules(*hardwareModules, *dataModules, *presentationModules, *viewModelModule) 
+             modules( *listOfModules, *viewModelModule) 
          } 
      } 
  } 
