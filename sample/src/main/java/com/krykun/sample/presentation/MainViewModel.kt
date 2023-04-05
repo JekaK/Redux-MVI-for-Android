@@ -9,6 +9,7 @@ import com.krykun.reduxmvi.action.AddStateAction
 import com.krykun.reduxmvi.ext.getStateUpdatesMapped
 import com.krykun.reduxmvi.ext.getStateUpdatesProperty
 import com.krykun.reduxmvi.ext.toDedicatedType
+import com.krykun.reduxmvi.ext.toDedicatedTypeNullable
 import com.krykun.reduxmvi.global.Action
 import com.krykun.reduxmvi.global.AppState
 import com.krykun.reduxmvi.global.Store
@@ -44,7 +45,7 @@ class MainViewModel(
         viewModelScope.launch {
             propertyProps()
                 .collect { value ->
-                    counter.value = value ?: 0
+                    counter.value = value
                 }
         }
         /* Collecting the `Flow<MainProps>` emitted by `mainProps()` and setting the value of
