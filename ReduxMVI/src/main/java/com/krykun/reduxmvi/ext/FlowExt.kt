@@ -20,7 +20,7 @@ inline fun <reified T> Flow<AppState>.getStateUpdates(bindingDispatcher: Corouti
         .flowOn(bindingDispatcher)
 }
 
-fun <R> Flow<Any>.toDedicatedType(): Flow<R> {
+fun <R> Flow<Any?>.toDedicatedType(): Flow<R?> {
     return this.map {
         it as R
     }
@@ -29,8 +29,8 @@ fun <R> Flow<Any>.toDedicatedType(): Flow<R> {
 @OptIn(ExperimentalCoroutinesApi::class)
 inline fun <reified T> Flow<AppState>.getStateUpdatesProperty(
     bindingDispatcher: CoroutineDispatcher,
-    crossinline transform: suspend (value: T) -> Any,
-): Flow<Any> {
+    crossinline transform: suspend (value: T) -> Any?,
+): Flow<Any?> {
 
     return this
         .flatMapLatest {

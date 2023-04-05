@@ -8,7 +8,7 @@ import com.krykun.sample.presentation.MainState
 class AddCounterAction : ReducibleAction {
     override fun reduce(state: AppState): AppState {
         return state.applyForState<MainState> {
-            it.copy(counter = it.counter + 1)
+            it.copy(counter = (it.counter?:0) + 1)
         }
     }
 }

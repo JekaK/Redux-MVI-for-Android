@@ -44,7 +44,7 @@ class MainMiddleware : Middleware<Action, Store<Action, AppState>> {
     private fun dispatchCounterToastAction(store: Store<Action, AppState>) {
         val counter = store.getState().findState<MainState>().counter
 
-        store.dispatch(ShowCounterToastAction(counter))
+        store.dispatch(ShowCounterToastAction(counter?:0))
     }
 
 }

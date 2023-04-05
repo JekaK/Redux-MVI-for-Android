@@ -44,7 +44,7 @@ class MainViewModel(
         viewModelScope.launch {
             propertyProps()
                 .collect { value ->
-                    counter.value = value
+                    counter.value = value ?: 0
                 }
         }
         /* Collecting the `Flow<MainProps>` emitted by `mainProps()` and setting the value of
