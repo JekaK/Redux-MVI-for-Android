@@ -172,7 +172,7 @@ class MainMiddleware : Middleware<Action, Store<Action, AppState>> {
 ```
 For middleware setup you should provide your own ```MiddlewareModule``` as in Sample package and connect it to Koin in App class.
 
-**!!!IPORTANT!!!**
+**!!!IMPORTANT!!!**
 
 For better performance you can create a custom feature for setup only this middlewares that you will use in particular screen.
 
