@@ -26,7 +26,7 @@ To install the library in your Android project, follow these steps:
 Note that you should replace `version` with the [latest release](https://github.com/JekaK/Redux-MVI-for-Android/releases) version available on JitPack.
 
 ## Example
-1. Start a Koin DI(it's powered by Koin, so you don't have a lot of choise what DI use). viewModelModule is module provided by sample. You will create it by yourself. Or not if you not using ViewModels at your project. Other modules provided by library and SHOULD BE CONNECTED AS BELOW:
+1. Start a Koin DI(it's powered by Koin, so you don't have a lot of choise what DI use). viewModelModule is module provided by sample. You will create it by yourself. Or not if you not using ViewModels at your project. Also setup a ViewState, because a default one is using `Any()` type. Other modules provided by library and SHOULD BE CONNECTED AS BELOW:
 
 ```kotlin
  class App : Application() { 
@@ -41,7 +41,9 @@ Note that you should replace `version` with the [latest release](https://github.
              androidContext(this@App) 
              modules( *listOfModules, *viewModelModule) 
          } 
-     } 
+     }
+     val store: Store<Action, AppState> = get()
+     store.dispatch(SetupStateAction(ViewState()))
  } 
  ```
 
@@ -91,40 +93,48 @@ In ```init block``` I adding a state for this screen to state list by pass it to
 Also ```mainProps``` give us a Flow of props that contains state mapped to props and can be used in our Activity or Fragment or Composable function navigated by Composable navigation.
 
 ```kotlin
- fun mainProps() = store.stateFlow() 
-     .getStateUpdatesMapped<MainState, MainProps>(bindingDispatcher) { 
-         it.toProps { 
-             store.dispatch(AddCounterAction()) 
-         } 
-     } 
+fun mainProps(): Flow<MainProps> {
+   return store.stateFlow()
+      .takeWhenChangedAsViewState<ViewState, MainState> {
+         it.mainState
+      }
+      .map { mainState ->
+         MainProps(mainState.counter, this::addCounter)
+      }
+      .flowOn(bindingDispatcher)
+}
 ```
 
 3. Create an action for some busines logic. In our case we have a button with counter. When we click on button action is dispatching and redusing a new state. This will trigger a state update via flow and show result to user:
 
 ```kotlin
-class AddCounterAction : ReducibleAction { 
-     override fun reduce(state: AppState): AppState { 
-         return state.applyForState<MainState> { 
-             it.copy(counter = it.counter + 1) 
-         } 
-     } 
- } 
+class AddCounterAction : ReducibleAction {
+   override fun reduce(state: AppState): AppState {
+      return state.copy(
+         viewState = state.viewState.updateViewState<ViewState> {
+            it.copy(
+               mainState = it.mainState.copy(
+                  counter = it.mainState.counter + 1
+               )
+            )
+         }
+      )
+   }
+}
  ```
 4. Then use it in Acivity as ```collectAsState``` function:
 
 ```kotlin
- val props = viewModel.mainProps().collectAsState(initial = MainProps()) 
- Column( 
-     modifier = Modifier.fillMaxSize(), 
-     horizontalAlignment = Alignment.CenterHorizontally, 
-     verticalArrangement = Arrangement.Center 
- ) { 
-     CounterView(props.value.counter) 
-     Spacer(modifier = Modifier.height(20.dp)) 
-     AddButton { 
-         props.value.addCounterAction() 
-     } 
- } 
+val props by viewModel.mainProps().collectAsState(initial = MainProps())
+Column(
+   modifier = Modifier.fillMaxSize(),
+   horizontalAlignment = Alignment.CenterHorizontally,
+   verticalArrangement = Arrangement.Center
+) {
+   CounterView(props.counter)
+   Spacer(modifier = Modifier.height(20.dp))
+   AddButton(viewModel::addCounter)
+}
  ```
  
 ## Middleware
@@ -163,9 +173,9 @@ class MainMiddleware : Middleware<Action, Store<Action, AppState>> {
      * The function is private because it's only used internally by the MainActivity
      */
     private fun dispatchCounterToastAction(store: Store<Action, AppState>) {
-        val counter = store.getState().findState<MainState>().counter
+       val counter = store.getState().viewState.asViewState<ViewState>().mainState.counter
 
-        store.dispatch(ShowCounterToastAction(counter))
+       store.dispatch(ShowCounterToastAction(counter))
     }
 
 }

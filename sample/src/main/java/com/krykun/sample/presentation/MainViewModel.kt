@@ -15,7 +15,8 @@ import com.krykun.sample.di.Feature
 import com.krykun.sample.navigation.MainNavigation
 import com.krykun.sample.state.ViewState
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 /**
@@ -54,15 +55,20 @@ class MainViewModel(
     }
 
     /**
-     * `propertyProps()` returns a `Property<Int>` that emits the current value of `MainState.counter`
-     * whenever it changes
+     * Constructs a Flow of [MainProps] representing the main properties of the application's user interface.
+     * This function observes changes in the application's state, extracts the relevant [MainState], and maps it
+     * to a [MainProps] object with specific properties.
+     *
+     * @return A Flow of [MainProps] containing the main properties for the user interface.
      */
-    fun mainProps(): Flow<MainState> {
-        return store.stateFlow()
-            .takeWhenChangedAsViewState<ViewState, MainState> {
-                it.mainState
-            }
-    }
+    fun mainProps() = store.stateFlow()
+        .takeWhenChangedAsViewState<ViewState, MainState> {
+            it.mainState
+        }
+        .map {
+            MainProps(it.counter, this::addCounter)
+        }
+        .flowOn(bindingDispatcher)
 
     /**
      * It returns a Flow of MainNavigation objects that are emitted whenever the navigation state
