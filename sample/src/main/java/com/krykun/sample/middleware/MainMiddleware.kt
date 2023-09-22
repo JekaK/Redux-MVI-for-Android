@@ -1,10 +1,14 @@
 package com.krykun.sample.middleware
 
-import com.krykun.reduxmvi.ext.findState
-import com.krykun.reduxmvi.global.*
+import com.krykun.reduxmvi.ext.asViewState
+import com.krykun.reduxmvi.global.Action
+import com.krykun.reduxmvi.global.AppState
+import com.krykun.reduxmvi.global.Dispatcher
+import com.krykun.reduxmvi.global.Middleware
+import com.krykun.reduxmvi.global.Store
 import com.krykun.sample.action.AddCounterAction
 import com.krykun.sample.action.ShowCounterToastAction
-import com.krykun.sample.presentation.MainState
+import com.krykun.sample.state.ViewState
 
 class MainMiddleware : Middleware<Action, Store<Action, AppState>> {
 
@@ -42,9 +46,9 @@ class MainMiddleware : Middleware<Action, Store<Action, AppState>> {
      * @param store Store<Action, AppState> - The store that the middleware is being applied to.
      */
     private fun dispatchCounterToastAction(store: Store<Action, AppState>) {
-        val counter = store.getState().findState<MainState>().counter
+        val counter = store.getState().viewState.asViewState<ViewState>().mainState.counter
 
-        store.dispatch(ShowCounterToastAction(counter?:0))
+        store.dispatch(ShowCounterToastAction(counter))
     }
 
 }

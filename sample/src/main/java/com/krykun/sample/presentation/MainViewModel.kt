@@ -5,11 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.krykun.reduxmvi.CleanupFeature
 import com.krykun.reduxmvi.SetupFeature
-import com.krykun.reduxmvi.action.AddStateAction
-import com.krykun.reduxmvi.ext.getStateUpdatesMapped
-import com.krykun.reduxmvi.ext.getStateUpdatesProperty
-import com.krykun.reduxmvi.ext.toDedicatedType
-import com.krykun.reduxmvi.ext.toDedicatedTypeNullable
+import com.krykun.reduxmvi.ext.takeWhenChangedAsViewState
 import com.krykun.reduxmvi.global.Action
 import com.krykun.reduxmvi.global.AppState
 import com.krykun.reduxmvi.global.Store
@@ -17,7 +13,9 @@ import com.krykun.reduxmvi.navigation.navigationFlowOf
 import com.krykun.sample.action.AddCounterAction
 import com.krykun.sample.di.Feature
 import com.krykun.sample.navigation.MainNavigation
+import com.krykun.sample.state.ViewState
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 /**
@@ -31,33 +29,13 @@ class MainViewModel(
     private val bindingDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
-    var counter = mutableStateOf(0)
-    val props = mutableStateOf(MainProps())
     val navigationEventsState = mutableStateOf<MainNavigation>(MainNavigation.EmptyNavEvent)
 
     /* Creating a new instance of the MainState class and adding it to the store. */
     init {
-        /* Adding the `MainState` to the store and setting up the `MainFeature` */
-        store.dispatch(AddStateAction(MainState()))
         store.dispatch(SetupFeature(Feature.MAIN))
-        /* Collecting the `Property<Int>` emitted by `propertyProps()` and setting the value of
-        `counter` to the value emitted by `propertyProps()` */
-        viewModelScope.launch {
-            propertyProps()
-                .collect { value ->
-                    counter.value = value
-                }
-        }
-        /* Collecting the `Flow<MainProps>` emitted by `mainProps()` and setting the value of
-        `props` to the value emitted by `mainProps()` */
-        viewModelScope.launch {
-            mainProps().collect {
-                props.value = it
-            }
-        }
         /* Collecting the `Flow<MainNavigation>` emitted by `navigationProps()` and setting the value
-        of
-                `navigationEventsState` to the value emitted by `navigationProps()` */
+        of `navigationEventsState` to the value emitted by `navigationProps()` */
         viewModelScope.launch {
             navigationProps().collect {
                 when (it.navigationRequest) {
@@ -71,27 +49,20 @@ class MainViewModel(
         }
     }
 
-    /**
-     * `mainProps` is a function that returns a `Flow` of `MainProps` that is updated whenever the
-     * `MainState` changes
-     */
-    private fun mainProps() = store.stateFlow()
-        .getStateUpdatesMapped<MainState, MainProps>(bindingDispatcher) {
-            it.toProps {
-                store.dispatch(AddCounterAction())
-            }
-        }
+    fun addCounter() {
+        store.dispatch(AddCounterAction())
+    }
 
     /**
      * `propertyProps()` returns a `Property<Int>` that emits the current value of `MainState.counter`
      * whenever it changes
      */
-    private fun propertyProps() = store.stateFlow()
-        .getStateUpdatesProperty<MainState>(bindingDispatcher) {
-            it.counter
-        }
-        .toDedicatedType<Int>()
-
+    fun mainProps(): Flow<MainState> {
+        return store.stateFlow()
+            .takeWhenChangedAsViewState<ViewState, MainState> {
+                it.mainState
+            }
+    }
 
     /**
      * It returns a Flow of MainNavigation objects that are emitted whenever the navigation state
