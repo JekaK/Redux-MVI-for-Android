@@ -40,10 +40,10 @@ Note that you should replace `version` with the [latest release](https://github.
          startKoin { 
              androidContext(this@App) 
              modules( *listOfModules, *viewModelModule) 
-         } 
+         }
+      val store: Store<Action, AppState> = get()
+      store.dispatch(SetupStateAction(ViewState()))
      }
-     val store: Store<Action, AppState> = get()
-     store.dispatch(SetupStateAction(ViewState()))
  } 
  ```
 
